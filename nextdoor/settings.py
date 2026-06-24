@@ -29,6 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'users',
+    'business',
+    'knox'
 ]
 
 MIDDLEWARE = [
@@ -59,6 +61,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'nextdoor.wsgi.application'
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',)
+}
+
+AUTH_USER_MODEL='users.CustomUser'
+AUTHENTICATION_BACKENDS=['users.auth_backend.EmailAuthBackend']
 
 
 # Database
