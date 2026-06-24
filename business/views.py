@@ -41,7 +41,7 @@ class BusinessViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['get'], url_path='my-business')
     def my_business(self, request):
         
-        business=BusinessModel.objects.filter(owner=request.owner)
+        business=BusinessModel.objects.filter(owner=request.user)
         
         serializer=self.serializer_class(business, many=True)
         
