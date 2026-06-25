@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
 from rest_framework.response import Response
 from business.models import BusinessModel
+from rest_framework.decorators import action
 
 # Create your views here.
 
@@ -30,3 +31,15 @@ class ProductViewSet(viewsets.ViewSet):
         
         else:
             return Response(serializer.errors, status=400)
+        
+    def list(self, request):
+        product=ProductModel.objects.filter(business__owner=request.user)
+        serializer=self.serializer_class(product, many=True)
+        
+        if not product:
+            return Response({"Error":"product not found"})
+        
+        return Response(serializer.data, status=200)
+    
+    
+       
