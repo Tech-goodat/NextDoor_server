@@ -5,6 +5,8 @@ from .serializers import *
 from .models import *
 from rest_framework import viewsets, permissions
 from knox.models import AuthToken
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 
 User=get_user_model()
 
@@ -48,3 +50,20 @@ class LoginViewSet(viewsets.ViewSet):
             
         else:
             return Response(serializer.errors, status=400)
+        
+class UserViewSet(viewsets.ViewSet):
+    permission_classes=[IsAuthenticated]
+    serializer_class=UserSerializer
+    
+    def list(self, request):
+        users=User.objects.all()
+        serializer=self.serializer_class(users, many=True)
+        
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def me(self, request):
+        serializer=self.serializer_class(request.user)
+        return Response(serializer.data)
+        
+
