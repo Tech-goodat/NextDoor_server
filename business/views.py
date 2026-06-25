@@ -41,8 +41,12 @@ class BusinessViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['get'], url_path='my-business')
     def my_business(self, request):
         
-        business=BusinessModel.objects.get(owner=request.user)
-        
+        try:
+            business=BusinessModel.objects.get(owner=request.user)
+            
+        except BusinessModel.DoesNotExist:
+            return Response({"Error":"You do not have a business yet"})
+         
         serializer=self.serializer_class(business, many=True)
         
         return Response(serializer.data, status=200)
