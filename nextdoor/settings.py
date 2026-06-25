@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'users',
     'business',
     'knox',
-     "corsheaders",
+    'corsheaders',
+    'products'
 ]
 
 MIDDLEWARE = [
