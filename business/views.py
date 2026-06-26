@@ -42,7 +42,7 @@ class BusinessViewSet(viewsets.ViewSet):
     def my_business(self, request):
         
         try:
-            business=BusinessModel.objects.get(owner=request.user)
+            business=BusinessModel.objects.filter(owner=request.user)
             
         except BusinessModel.DoesNotExist:
             return Response({"Error":"You do not have a business yet"})
