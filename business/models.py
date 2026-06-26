@@ -4,10 +4,10 @@ from django.contrib.auth import get_user_model
 User=get_user_model()
 
 class BusinessModel(models.Model):
-    owner=models.ForeignKey(
+    owner=models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        related_name="businesses"
+        related_name="business"
     )
     business_type=models.CharField(max_length=100)
     business_name=models.CharField(max_length=200, unique=True)

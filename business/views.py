@@ -15,6 +15,8 @@ class BusinessViewSet(viewsets.ViewSet):
     
     
     def create(self, request):
+        if hasattr(request.user, "business"):
+            return Response({"error":"You already own a business"}, status=404)
         serializer=self.serializer_class(data=request.data)
         
         if serializer.is_valid():
@@ -42,7 +44,7 @@ class BusinessViewSet(viewsets.ViewSet):
     def my_business(self, request):
         
         try:
-            business=BusinessModel.objects.filter(owner=request.user)
+            business=request.user.business
             
         except BusinessModel.DoesNotExist:
             return Response({"Error":"You do not have a business yet"})
