@@ -47,7 +47,7 @@ class BusinessViewSet(viewsets.ViewSet):
         except BusinessModel.DoesNotExist:
             return Response({"Error":"You do not have a business yet"})
          
-        serializer=self.serializer_class(business, many=True)
+        serializer=self.serializer_class(business)
         
         return Response(serializer.data, status=200)
     
