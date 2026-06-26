@@ -7,7 +7,7 @@ class BusinessModel(models.Model):
     owner=models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        related_name="business"
+        related_name="biz"
     )
     business_type=models.CharField(max_length=100)
     business_name=models.CharField(max_length=200, unique=True)
