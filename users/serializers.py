@@ -29,7 +29,9 @@ class LoginSerializer(serializers.Serializer):
     password=serializers.CharField()
     
 class UserSerializer(serializers.ModelSerializer):
+    business_name=serializers.CharField(source="biz.business_name", read_only=True)
     class Meta:
         model=User
-        fields=['id', 'email', 'first_name', 'last_name', 'phone_number', 'house_number']
+        fields=['id', 'email', 'first_name', 'last_name', 'phone_number', 'house_number', 'business_name']
+        read_only_fields=['business_name']
     

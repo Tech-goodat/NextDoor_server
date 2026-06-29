@@ -40,7 +40,7 @@ class BusinessViewSet(viewsets.ViewSet):
        
     
     
-    @action(detail=False, methods=["get"], url_path="my-business")
+    @action(detail=False, methods=["get"])
     def my_business(self, request):
         try:
             business = BusinessModel.objects.get(owner=request.user)
