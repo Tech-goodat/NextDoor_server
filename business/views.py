@@ -28,18 +28,20 @@ class BusinessViewSet(viewsets.ViewSet):
             return Response(serializer.errors, status=400)
     
     def list(self, request):
-        business=BusinessModel.objects.all()
-        serializer=self.serializer_class(business, many=True)
+        queryset=BusinessModel.objects.all()
         
-        if not business:
-            return Response({"Error":"businesses not found"})
+        ordering=request.query_params.get("ordering", "-created_at")
+        queryset=queryset.order_by(ordering)
+        limit=request.query_params.get("limit")
         
-        else:
-            return Response(serializer.data, status=200)
-        
+        if limit:
+            try:
+                queryset=queryset[:int(limit)]
+            except ValueError:
+                return Response({"error":"limit must be an integer"}, status=400)
+        serializer=self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=200)
        
-    
-    
     @action(detail=False, methods=["get"])
     def my_business(self, request):
         try:

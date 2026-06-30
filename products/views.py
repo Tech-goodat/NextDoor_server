@@ -42,12 +42,23 @@ class ProductViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=200)
    
     def list(self, request):
-        products=ProductModel.objects.all()
-        if not products.exists():
-            return Response({'error':'products not found'}, status=404)
+        queryset=ProductModel.objects.all()
         
-        serializer=self.serializer_class(products, many=True)
+        ordering=request.query_params.get("ordering", "-created_at")
+        queryset=queryset.order_by(ordering)
+        limit=request.query_params.get("limit")
+        
+        if limit:
+            try:
+                queryset=queryset[:int(limit)]
+                
+            except ValueError:
+                return Response({"error":"limit must be an integer"})
+            
+        serializer=self.serializer_class(queryset, many=True)
+        
         return Response(serializer.data, status=200)
+       
     
     def retrieve(self, request, pk=None):
         try:
