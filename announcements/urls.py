@@ -7,6 +7,6 @@ from .views import *
 
 
 router=DefaultRouter()
-router.register('announcements', AnnouncementsViewSet, basename='announcements')
+router.register("announcement", AnnouncementsViewSet, basename="announcement")
 
 urlpatterns =router.urls
