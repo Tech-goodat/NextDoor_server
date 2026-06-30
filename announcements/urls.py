@@ -7,5 +7,6 @@ from .views import *
 
 
 router=DefaultRouter()
+router.register('announcements' AnnouncementsViewSet basename='announcements')
 
 urlpatterns =router.urls
