@@ -6,6 +6,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from business.models import BusinessModel
 from rest_framework.decorators import action
+from notifications.models import NotificationsModel
+from announcements.models import AnnouncementModel
 
 # Create your views here.
 
@@ -25,7 +27,8 @@ class ProductViewSet(viewsets.ViewSet):
         serializer=self.serializer_class(data=request.data)
         
         if serializer.is_valid():
-            serializer.save(business=business)
+            product=serializer.save(business=business)
+            AnnouncementModel.objects.create(business=business, product=product, title='New Product', message=f"{business.business_name} added a new {product.product_name}.", announcement_type=AnnouncementModel.AnnouncementType.NEW_PRODUCT)
             
             return Response(serializer.data, status=201)
         

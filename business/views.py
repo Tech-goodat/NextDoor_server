@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from .models import *
 from .serializers import *
 from rest_framework.decorators import action
+from notifications.models import NotificationsModel
+from announcements.models import AnnouncementModel
 
 
 # Create your views here.
@@ -20,8 +22,9 @@ class BusinessViewSet(viewsets.ViewSet):
         serializer=self.serializer_class(data=request.data)
         
         if serializer.is_valid():
-            serializer.save(owner=request.user)
-            
+            business=serializer.save(owner=request.user)
+            AnnouncementModel.objects.create(business=business, title='New Business', message=f"{business.business_name} joined the community.", announcement_type=AnnouncementModel.AnnouncementType.NEW_BUSINESS)
+              
             return Response(serializer.data, status=201)
         
         else:
