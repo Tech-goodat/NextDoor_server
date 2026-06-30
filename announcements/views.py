@@ -23,7 +23,7 @@ class AnnouncementsViewSet(viewsets.ViewSet):
                 
             except ValueError:
                 return Response({'error':'invalid parameter'}, status=400)
-        serializer=self.serializer_class(queryset, may=True)
+        serializer=self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=200)
     
     
