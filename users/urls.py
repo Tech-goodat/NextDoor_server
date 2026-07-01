@@ -11,6 +11,7 @@ router=DefaultRouter()
 router.register('signup', ReqisterViewSet, basename='signup' )
 router.register('login', LoginViewSet, basename='login')
 router.register('user', UserViewSet, basename='user')
+router.register('auth/google', GoogleLoginViewSet, basename='google-login')
 
 
 urlpatterns =router.urls

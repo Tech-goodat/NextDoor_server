@@ -7,6 +7,9 @@ from rest_framework import viewsets, permissions
 from knox.models import AuthToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from django.conf import settings
 
 User=get_user_model()
 
@@ -50,6 +53,39 @@ class LoginViewSet(viewsets.ViewSet):
             
         else:
             return Response(serializer.errors, status=400)
+        
+class GoogleLoginViewSet(viewsets.ViewSet):
+    permission_classes=[permissions.AllowAny]
+    def create(self, request):
+        
+        google_token=request.data.get("token")
+        
+        if not google_token:
+            return Response({"error":"Token is required"}, status=400)
+        
+        try:
+            idinfo=id_token.verify_oauth2_token(
+                google_token,
+                requests.Request(),
+                settings.GOOGLE_CLIENT_ID
+            )
+        except ValueError:
+            return Response({"error":"Invalid token"}, status=400)
+        email=idinfo["email"]
+        first_name=idinfo.get("given_name", "")
+        last_name=idinfo.get("family_name", "")
+        
+        user, created=User.objects.get_or_create(
+            email=email,
+            defaults={
+                "first_name":first_name,
+                "last_name":last_name
+            },
+        )
+        
+        _, token=AuthToken.objects.create(user)
+        
+        return Response({"user":UserSerializer(user).data, "token":token})
         
 class UserViewSet(viewsets.ViewSet):
     permission_classes=[IsAuthenticated]

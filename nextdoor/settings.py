@@ -90,6 +90,8 @@ AUTH_USER_MODEL='users.CustomUser'
 AUTHENTICATION_BACKENDS=['users.auth_backend.EmailAuthBackend']
 
 
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
