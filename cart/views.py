@@ -20,7 +20,7 @@ class CartViewSet(viewsets.ViewSet):
     
     def list(self, request):
         cart=self.get_cart(request)
-        serializer=self.get_serializer(cart)
+        serializer=self.serializer_class(cart)
         return Response(serializer.data)
     
     @action(detail=False, methods=['post'])
