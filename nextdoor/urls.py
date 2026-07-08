@@ -9,5 +9,6 @@ urlpatterns = [
     path('', include('products.urls')),
     path('', include('notifications.urls')),
     path('', include('announcements.urls')),
+    path('', include('cart.urls')),
     path('api/auth/', include('knox.urls')),
 ]
