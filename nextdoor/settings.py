@@ -99,6 +99,8 @@ DATABASES = {
     }
 }
 
+
+
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 if DATABASE_URL:
