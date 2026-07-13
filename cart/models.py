@@ -34,7 +34,8 @@ class CartItemModel(models.Model):
 
     @property
     def subtotal(self):
-        return (self.product.price -self.product.discount) * self.quantity
+        discount = self.product.discount or 0
+        return (self.product.price -discount) * self.quantity
 
     class Meta:
         unique_together=('cart', 'product')
