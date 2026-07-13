@@ -14,11 +14,12 @@ class CartModel(models.Model):
 
     @property
     def total_price(self):
-        return sum((item.product.price - item.product.discount) * item.quantity for item in self.items.all())
+        return sum(item.subtotal for item in self.items.all())
     
     @property
     def total_items(self):
         return sum(item.quantity for item in self.items.all())
+
 
     def __str__(self):
         return f"Cart for {self.user.username}"
@@ -30,6 +31,10 @@ class CartItemModel(models.Model):
     quantity=models.PositiveIntegerField(default=1)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
+
+    @property
+    def subtotal(self):
+        return (self.product.price -self.product.discount) * self.quantity
 
     class Meta:
         unique_together=('cart', 'product')
